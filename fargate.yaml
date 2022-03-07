@@ -51,6 +51,9 @@ Resources:
     Type: AWS::ECS::Cluster
     Properties:
       ClusterName: !Join ['', [!Ref ServiceName, Cluster]]
+      ClusterSettings:
+        - Name: containerInsights
+          Value: enabled
   TaskDefinition:
     Type: AWS::ECS::TaskDefinition
     # Makes sure the log group is created before it is used.
@@ -217,6 +220,8 @@ Resources:
         # this is the default, but is specified here in case it needs to be changed
         - Key: idle_timeout.timeout_seconds
           Value: 60
+        - Key: routing.http.drop_invalid_header_fields.enabled
+          Value: true
       Name: !Join ['', [!Ref ServiceName, LoadBalancer]]
       # "internal" is also an option
       Scheme: internet-facing
